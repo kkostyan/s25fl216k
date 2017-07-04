@@ -100,5 +100,9 @@ typedef struct
 void S25FL216K_WriteEnable (S25FL216K *device);
 /// Write disable.
 void S25FL216K_WriteDisable (S25FL216K *device);
+/// Read status register.
+uint8_t S25FL216K_ReadStatus (S25FL216K *device);
+/// Write status register.
+void S25FL216K_WriteStatus (S25FL216K *device, uint8_t status);
 
 #endif /* _S25FL216K_H_ */
