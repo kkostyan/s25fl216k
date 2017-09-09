@@ -11,7 +11,7 @@ To work with this library you need to declare an instance of S25FL216K:
 
 Multiple instances can be declared.
 
-Implement an `spi_write` and `spi_read` functions (example for STM32):
+Implement an `spi_write`, `spi_read` and `spi_cs` functions (example for STM32):
 
     SPI_HandleTypeDef hspi1;
 
@@ -24,8 +24,22 @@ Implement an `spi_write` and `spi_read` functions (example for STM32):
     {
       return HAL_SPI_Receive(&hspi1, buffer, count, 1);
     }
+    
+    void spi_cs (S25FL216K_CS_STATE state)
+    {
+      switch (state)
+      {
+        case S25FL216K_CS_LOW:
+          HAL_GPIO_WritePin (S25FL216K_CS_GPIO_Port, S25FL216K_CS_Pin, GPIO_PIN_RESET);
+          break;
+        case S25FL216K_CS_HIGH:
+          HAL_GPIO_WritePin (S25FL216K_CS_GPIO_Port, S25FL216K_CS_Pin, GPIO_PIN_SET);
+          break;
+      }
+    }
 
-Set instance pointers to `spi_write` and `spi_read` functions:
+Set instance pointers to `spi_write`, `spi_read` and `spi_cs` functions:
 
     s25fl216k_0.spi_write = &spi_write;
     s25fl216k_0.spi_read = &spi_read;
+    s25fl216k_0.spi_cs = &spi_cs;

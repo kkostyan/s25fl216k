@@ -84,7 +84,14 @@ typedef union
   } bit;
   /// Access to whole register.
   uint8_t all;
-} S25FL216K_STATUS_REGISTER;
+} S25FL216K_STATUS;
+
+/// S25FL216K SPI CS signal states.
+typedef enum
+{
+  S25FL216K_CS_LOW  = 0, ///< Drive SPI CS signal low.
+  S25FL216K_CS_HIGH = 1, ///< Drive SPI CS signal high.
+} S25FL216K_CS_STATE;
 
 /** S25FL216K structure.
   */
@@ -94,6 +101,8 @@ typedef struct
   uint8_t (*spi_write) (uint8_t *buffer, uint8_t count);
   /// Pointer to SPI read function.
   uint8_t (*spi_read) (uint8_t *buffer, uint8_t count);
+  /// Pointer to SPI CS control function.
+  void (*spi_cs) (S25FL216K_CS_STATE state);
 } S25FL216K;
 
 /// Write enable.
@@ -101,8 +110,24 @@ void S25FL216K_WriteEnable (S25FL216K *device);
 /// Write disable.
 void S25FL216K_WriteDisable (S25FL216K *device);
 /// Read status register.
-uint8_t S25FL216K_ReadStatus (S25FL216K *device);
+S25FL216K_STATUS S25FL216K_ReadStatus (S25FL216K *device);
 /// Write status register.
-void S25FL216K_WriteStatus (S25FL216K *device, uint8_t status);
+void S25FL216K_WriteStatus (S25FL216K *device, S25FL216K_STATUS status);
+/// Read data.
+void S25FL216K_ReadData (S25FL216K *device, uint32_t addr, uint8_t *data, uint8_t count);
+/// Fast read.
+void S25FL216K_FastRead (S25FL216K *device, uint32_t addr, uint8_t *data, uint8_t count);
+/// Page program.
+void S25FL216K_PageProgram (S25FL216K *device, uint32_t addr, uint8_t *data, uint8_t count);
+/// Sector erase.
+void S25FL216K_SectorErase (S25FL216K *device, uint32_t addr);
+/// Block erase.
+void S25FL216K_BlockErase (S25FL216K *device, uint32_t addr);
+/// Chip erase.
+void S25FL216K_ChipErase (S25FL216K *device);
+/// Read device ID.
+uint8_t S25FL216K_DeviceID (S25FL216K *device);
+/// Read JEDEC ID.
+uint16_t S25FL216K_JEDECID (S25FL216K *device);
 
 #endif /* _S25FL216K_H_ */
