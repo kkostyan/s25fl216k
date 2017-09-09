@@ -189,6 +189,38 @@ S25FL216K_ChipErase (S25FL216K *device)
   device->spi_cs (S25FL216K_CS_HIGH);
 }
 
+void
+S25FL216K_PowerDown (S25FL216K *device)
+{
+  // Data output buffer.
+  uint8_t buffer_out;
+  
+  // Fill data output buffer.
+  buffer_out = S25FL216K_COMMAND_POWER_DOWN;
+  // Drive device CS low.
+  device->spi_cs (S25FL216K_CS_LOW);
+  // Write data output buffer to device.
+  device->spi_write (&buffer_out, sizeof(buffer_out));
+  // Drive device CS high.
+  device->spi_cs (S25FL216K_CS_HIGH);
+}
+
+void
+S25FL216K_ReleasePD (S25FL216K *device)
+{
+  // Data output buffer.
+  uint8_t buffer_out;
+  
+  // Fill data output buffer.
+  buffer_out = S25FL216K_COMMAND_RELEASE_PD;
+  // Drive device CS low.
+  device->spi_cs (S25FL216K_CS_LOW);
+  // Write data output buffer to device.
+  device->spi_write (&buffer_out, sizeof(buffer_out));
+  // Drive device CS high.
+  device->spi_cs (S25FL216K_CS_HIGH);
+}
+
 uint8_t
 S25FL216K_DeviceID (S25FL216K *device)
 {
